@@ -202,7 +202,7 @@ class ScriptEngine:
             pyautogui.moveTo(target_x, target_y)
             return
 
-        speed = random.uniform(900.0, 1200.0)
+        speed = random.uniform(1800.0, 2400.0)
         total_time = max(0.2, distance / speed)
         step_interval = 0.01
         steps = max(1, int(total_time / step_interval))
