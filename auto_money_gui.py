@@ -556,6 +556,27 @@ class MoneyApp:
     def get_selected_config(self) -> Optional[ScriptConfig]:
         return self.configs.get(self.mode_var.get())
 
+    def reload_selected_config(self) -> Optional[ScriptConfig]:
+        selected_name = self.mode_var.get()
+        if not selected_name:
+            return None
+
+        try:
+            latest_configs = self.load_configs()
+        except Exception as exc:  # noqa: BLE001
+            self.show_error(f"重新加载配置失败：{exc}")
+            return None
+
+        config = latest_configs.get(selected_name)
+        if config is None:
+            self.show_error(f"未找到当前模式配置：{selected_name}")
+            return None
+
+        self.configs = latest_configs
+        self.script_name_var.set(config.name)
+        self._set_description(config.description)
+        return config
+
     def set_status(self, text: str) -> None:
         self.root.after(0, lambda: self.status_var.set(text))
 
@@ -573,7 +594,7 @@ class MoneyApp:
             self.engine.stop()
             return
 
-        config = self.get_selected_config()
+        config = self.reload_selected_config()
         if config is None:
             self.show_error("请先选择一个脚本模式。")
             return

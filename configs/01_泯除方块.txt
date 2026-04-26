@@ -3,6 +3,7 @@
 @description
 请先手操一把。
 在游戏机前，可以按F的情况下开启脚本。
+务必调低画质，确保加载速度！
 @actions
 KEY f
 WAIT 2
