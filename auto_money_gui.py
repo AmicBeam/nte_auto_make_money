@@ -17,6 +17,10 @@ CONFIG_DIR = Path(__file__).resolve().parent / "configs"
 BILIBILI_URL = "https://space.bilibili.com/9412490"
 APP_TITLE = "自动赚钱脚本面板"
 RATIO_TOLERANCE = 0.03
+UI_FONT_FAMILY = "Microsoft YaHei UI"
+UI_FONT_BODY = (UI_FONT_FAMILY, 10)
+UI_FONT_TITLE = (UI_FONT_FAMILY, 12, "bold")
+UI_FONT_LINK = (UI_FONT_FAMILY, 10, "underline")
 
 
 @dataclass
@@ -232,8 +236,9 @@ class MoneyApp:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
         self.root.title(APP_TITLE)
-        self.root.geometry("900x540")
-        self.root.minsize(860, 500)
+        self.root.geometry("990x540")
+        self.root.minsize(946, 500)
+        self._setup_styles()
 
         pyautogui.FAILSAFE = True
         pyautogui.PAUSE = 0
@@ -256,6 +261,15 @@ class MoneyApp:
             self.mode_var.set(mode_names[0])
             self._on_mode_change()
 
+    def _setup_styles(self) -> None:
+        style = ttk.Style(self.root)
+        style.configure("TLabel", font=UI_FONT_BODY)
+        style.configure("TButton", font=UI_FONT_BODY)
+        style.configure("TRadiobutton", font=UI_FONT_BODY)
+        style.configure("TLabelframe", font=UI_FONT_BODY)
+        style.configure("TLabelframe.Label", font=UI_FONT_BODY)
+        style.configure("TEntry", font=UI_FONT_BODY)
+
     def load_configs(self) -> Dict[str, ScriptConfig]:
         configs: Dict[str, ScriptConfig] = {}
         if not CONFIG_DIR.exists():
@@ -272,16 +286,20 @@ class MoneyApp:
         action_lines: List[str] = []
         in_actions = False
 
-        for raw_line in raw_lines:
-            line = raw_line.strip()
+        index = 0
+        while index < len(raw_lines):
+            line = raw_lines[index].strip()
             if not line:
+                index += 1
                 continue
 
             if line.startswith("#"):
+                index += 1
                 continue
 
             if in_actions:
                 action_lines.append(line)
+                index += 1
                 continue
 
             if not line.startswith("@"):
@@ -291,20 +309,56 @@ class MoneyApp:
 
             tag_line = line[1:].strip()
             if not tag_line:
+                index += 1
                 continue
 
             if tag_line.lower() == "actions":
                 in_actions = True
+                index += 1
                 continue
 
             parts = tag_line.split(None, 1)
-            if len(parts) != 2:
-                raise ValueError(
-                    f"配置标签缺少内容：{file_path.name} 中的 `{line}`"
-                )
+            key = parts[0].strip().lower()
 
-            key, value = parts[0].strip().lower(), parts[1].strip()
-            metadata[key] = value
+            if len(parts) == 1:
+                if key != "description":
+                    raise ValueError(
+                        f"配置标签缺少内容：{file_path.name} 中的 `{line}`"
+                    )
+
+                desc_lines: List[str] = []
+                index += 1
+                while index < len(raw_lines):
+                    next_line = raw_lines[index].rstrip()
+                    next_stripped = next_line.strip()
+                    if next_stripped.startswith("@"):
+                        break
+                    if next_stripped.startswith("#"):
+                        index += 1
+                        continue
+                    desc_lines.append(next_stripped)
+                    index += 1
+
+                while desc_lines and not desc_lines[0]:
+                    desc_lines.pop(0)
+                while desc_lines and not desc_lines[-1]:
+                    desc_lines.pop()
+
+                value = "\n".join(desc_lines)
+                if not value:
+                    raise ValueError(
+                        f"配置标签缺少内容：{file_path.name} 中的 `{line}`"
+                    )
+            else:
+                value = parts[1].strip()
+
+            if key == "description" and key in metadata:
+                metadata[key] = f"{metadata[key]}\n{value}"
+            else:
+                metadata[key] = value
+
+            if len(parts) != 1:
+                index += 1
 
         missing_keys = [
             key for key in ("resolution", "name", "description") if key not in metadata
@@ -406,7 +460,7 @@ class MoneyApp:
             text=BILIBILI_URL,
             fg="#1a73e8",
             cursor="hand2",
-            font=("Arial", 10, "underline"),
+            font=UI_FONT_LINK,
         )
         link.grid(row=0, column=1, sticky="w", padx=(12, 0))
         link.bind("<Button-1>", self._open_bilibili_link)
@@ -434,11 +488,11 @@ class MoneyApp:
         info_frame.columnconfigure(0, weight=1)
 
         ttk.Label(
-            info_frame, textvariable=self.script_name_var, font=("Arial", 12, "bold")
+            info_frame, textvariable=self.script_name_var, font=UI_FONT_TITLE
         ).grid(row=0, column=0, sticky="w")
 
         self.desc_text = tk.Text(
-            info_frame, height=8, wrap=tk.WORD, state=tk.DISABLED, font=("Arial", 10)
+            info_frame, height=8, wrap=tk.WORD, state=tk.DISABLED, font=UI_FONT_BODY
         )
         self.desc_text.grid(row=1, column=0, sticky="ew", pady=(8, 0))
 

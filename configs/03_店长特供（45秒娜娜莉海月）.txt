@@ -1,5 +1,22 @@
 @resolution 2560x1440
 @name 店长特供（45秒娜娜莉海月）
-@description 脚本内容待补充。
+@description
+请先手操一把，携带娜娜莉和海月。
+在柜台前，可以按F的情况下开启脚本。
 @actions
-EMPTY
+KEY f
+WAIT 2
+MOVE 2276 1350
+CLICK left
+WAIT 0.2
+MOVE 143 603
+WAIT 5
+LOOP_START 70
+CLICK left
+WAIT 0.5
+LOOP_END
+MOVE 63 62
+CLICK left
+WAIT 1.4
+MOVE 1552 1122
+WAIT 1

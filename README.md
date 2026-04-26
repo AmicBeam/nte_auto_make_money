@@ -48,6 +48,8 @@ python auto_money_gui.py
 
 直接双击项目根目录下的 `start_gui.bat`。
 
+请使用管理员模式启动 `start_gui.bat`。
+
 这个批处理会自动：
 
 - 进入脚本所在目录
@@ -64,7 +66,9 @@ python auto_money_gui.py
 ```text
 @resolution 2560x1440
 @name 泯除方块
-@description 在游戏机前，可以按F的情况下开启脚本。
+@description
+请先手操一把。
+在游戏机前，可以按F的情况下开启脚本。
 @actions
 KEY f
 WAIT 2
@@ -86,8 +90,19 @@ WAIT 3
 - `@resolution` 基准分辨率，例如 `2560x1440`
 - `@name` 脚本名称
 - `@description` 脚本说明文本，会显示在 GUI 右侧
+- `@description` 可单行书写，也可单独占一行后继续写多行正文
 - `@actions` 表示从下一行开始进入动作区
 - `#` 表示单行注释，可用于头部和动作区
+
+多行说明示例：
+
+```text
+@name 泯除方块
+@description
+请先手操一把。
+在游戏机前，可以按F的情况下开启脚本。
+@actions
+```
 
 ## 支持的动作指令
 

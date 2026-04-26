@@ -1,6 +1,8 @@
 @resolution 2560x1440
 @name 泯除方块
-@description 在游戏机前，可以按F的情况下开启脚本。
+@description
+请先手操一把。
+在游戏机前，可以按F的情况下开启脚本。
 @actions
 KEY f
 WAIT 2
