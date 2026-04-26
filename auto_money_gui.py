@@ -492,7 +492,7 @@ class MoneyApp:
         ).grid(row=0, column=0, sticky="w")
 
         self.desc_text = tk.Text(
-            info_frame, height=8, wrap=tk.WORD, state=tk.DISABLED, font=UI_FONT_BODY
+            info_frame, height=5, wrap=tk.WORD, state=tk.DISABLED, font=UI_FONT_BODY
         )
         self.desc_text.grid(row=1, column=0, sticky="ew", pady=(8, 0))
 
