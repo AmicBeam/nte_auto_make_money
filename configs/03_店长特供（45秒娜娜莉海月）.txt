@@ -1,0 +1,5 @@
+@resolution 2560x1440
+@name 店长特供（45秒娜娜莉海月）
+@description 脚本内容待补充。
+@actions
+EMPTY

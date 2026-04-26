@@ -1,0 +1,17 @@
+@resolution 2560x1440
+@name 泯除方块
+@description 在游戏机前，可以按F的情况下开启脚本。
+@actions
+KEY f
+WAIT 2
+MOVE 2125 488
+CLICK left
+MOVE 2238 1347
+CLICK left
+WAIT 7
+LOOP_START 14
+KEY space
+WAIT 0.2
+LOOP_END
+KEY esc
+WAIT 3

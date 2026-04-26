@@ -1,0 +1,5 @@
+@resolution 2560x1440
+@name 店长特供（团三郎）
+@description 脚本内容待补充。
+@actions
+EMPTY
